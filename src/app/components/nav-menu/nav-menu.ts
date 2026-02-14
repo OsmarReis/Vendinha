@@ -1,12 +1,7 @@
 import { Component, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
-
-export interface NavLinksI {
-  svgIcon: string;
-  urlPath: string;
-  name: string;
-}
+import { MatIconModule } from "@angular/material/icon";
+import { NavLinksI } from "../../types/tsinterfaces";
 
 @Component({
   selector: 'app-nav-menu',
@@ -16,9 +11,9 @@ export interface NavLinksI {
         @for (item of navLinksArr(); track $index) {
           <a routerLink={{item.urlPath}}  [routerLinkActive]="colorActive" [routerLinkActiveOptions]="{ exact: true }" class="w-full pt-1 flex flex-col justify-start items-center text-xs ease-linear duration-75">
             <div class="size-12 flex justify-center items-center">
-                <mat-icon fontIcon={{item.svgIcon}}/>
+                <mat-icon fontIcon={{item.icon}}/>
             </div>
-            {{item.name}}
+            {{item.displayName}}
           </a>
         }
   </nav>
