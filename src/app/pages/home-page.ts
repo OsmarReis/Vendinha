@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MainWrapper } from '../components/main-wrapper/main-wrapper';
 import { Wrapper } from '../components/wrapper/wrapper';
 import { SearchAccountInput } from '../components/search-account-input/search-account-input';
-import { accountData } from '../models/accountData';
 import { SearchProductInput } from '../components/search-product-input/search-product-input';
+import { AccountsStore } from '../store/accounts.store';
+import { ProductsStore } from '../store/products.store';
 
 @Component({
   selector: 'app-home-page',
@@ -12,9 +13,8 @@ import { SearchProductInput } from '../components/search-product-input/search-pr
     <app-main-wrapper>
       <app-wrapper>
           <app-search-account-input
-            [accountsData]="accountsData"
             [hasTextLabel]="labelText"
-            (isAccountSelected)="setAccountSelected($event)"
+            [accountsData]="accountStore.accounts()"
           />
         
           <app-search-product-input/>
@@ -48,28 +48,18 @@ import { SearchProductInput } from '../components/search-product-input/search-pr
         </div>
       </app-wrapper>
 
-      <button class="w-full border border-orange-600 bg-orange-600 cursor-pointer text-white text-xl font-semibold uppercase py-4 rounded-md drop-shadow hover:bg-white hover:text-orange-600">Finalizar Compra</button>
+      <button class="w-full border border-orange-400 bg-orange-400 cursor-pointer text-white text-xl font-semibold uppercase py-4 rounded-md drop-shadow hover:bg-white hover:text-orange-400">Finalizar Compra</button>
     </app-main-wrapper>
   `,
 })
 export class HomePage {
+
+  protected accountStore = inject(AccountsStore)
+
   protected labelText = 'Possui conta?';
-  protected accountsData = accountData;
   protected accountName = signal('');
   protected accountAmount = signal(0);
   protected totalExpenses = signal(20);
   protected amountAfterPurchase = signal(0);
   protected accountSelected = signal('');
-
-  setAccountSelected(value: string) {
-    this.accountSelected.set(value);
-    this.accountName.set(
-      this.accountsData.find((acc) => acc.id === Number(value))?.name || '',
-    );
-    this.accountAmount.set(
-      this.accountsData.find((acc) => acc.id === Number(value))?.initalAmount ||
-        0,
-    );
-    this.amountAfterPurchase.set(this.accountAmount() - this.totalExpenses());
-  }
 }
