@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
-import { AccountI } from '../../types/tsinterfaces';
+import { AccountStoreSchema } from '../../models/storeModels';
+
 
 @Component({
   selector: 'app-search-account-input',
@@ -19,14 +20,14 @@ import { AccountI } from '../../types/tsinterfaces';
     >
       <option value="">Escolha uma conta</option>
       @for (account of accountsData(); track account.id) {
-        <option [value]="account.id">{{ account.name }}</option>
+        <option [value]="account.id">{{account.id}} - {{ account.name }}</option>
       }
     </select>
     </div>
   `,
 })
 export class SearchAccountInput {
-  accountsData = input<AccountI[]>([]);
+  accountsData = input<AccountStoreSchema[]>([]);
   hasTextLabel = input("");
   protected selectedAccount = signal(' ');
   protected isAccountSelected = output<string>();
