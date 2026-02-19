@@ -1,10 +1,11 @@
 import { Component, signal } from "@angular/core";
 import { MainWrapper } from "../components/main-wrapper/main-wrapper";
 import { Wrapper } from "../components/wrapper/wrapper";
+import { ActionButton } from "../components/action-button/action-button.component";
 
 @Component({
   selector: "app-balance-page",
-  imports: [MainWrapper, Wrapper],
+  imports: [MainWrapper, Wrapper, ActionButton],
   styles:`div > p {
     width: 100%;
     display: flex;
@@ -60,10 +61,11 @@ import { Wrapper } from "../components/wrapper/wrapper";
 
       <app-wrapper>
         <h1 class="text-base text-center uppercase font-semibold py-4">Transações feitas</h1>
-        <div class="w-full h-145 border border-black/50 rounded bg-[#F5F5F5]">
+        <div class="w-full h-100 border border-black/50 rounded bg-[#F5F5F5]">
 
         </div>
       </app-wrapper>
+      <app-action-button>Adicionar compra de produto</app-action-button>
     </app-main-wrapper>
   `,
 })

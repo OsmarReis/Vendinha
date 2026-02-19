@@ -1,104 +1,71 @@
 import { Injectable } from "@angular/core";
-import { DBSchema } from "../types/tsinterfaces";
+import { DBSchema } from "../models/storeModels";
 
 @Injectable({ providedIn: "root" })
 export class IndexedDBService {
-    private dbName = "SalesManagementDB";
-    private dbVersion = 1;
+    
     private db!: IDBDatabase;
 
-    async initDB(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(this.dbName, this.dbVersion);
+    async init(): Promise<void> {
+        return new Promise ((resolve, reject) => {
 
-            request.onupgradeneeded = (event) => {
-                const db = (event.target as IDBOpenDBRequest).result;
+            const request = indexedDB.open('app-DB', 1)
 
-                db.createObjectStore("accounts", { keyPath: "id" });
-                db.createObjectStore("products", { keyPath: "id" });
-                db.createObjectStore("transactions", { keyPath: "id" });
+            request.onupgradeneeded = (event: any) => { //verificar esse any
+                const db = event.target.result as IDBDatabase;
+
+                if(!db.objectStoreNames.contains("accounts")) {
+                    db.createObjectStore("accounts", { keyPath: "id" })
+                };
+
+                if(!db.objectStoreNames.contains("products")) {
+                    db.createObjectStore("products", { keyPath: "id" })
+                };
+
+                if(!db.objectStoreNames.contains("transactions")) {
+                    db.createObjectStore("transactions", { keyPath: "id" })
+                };
             };
 
-            request.onsuccess = (event) => {
-                this.db = (event.target as IDBOpenDBRequest).result;
+            request.onsuccess = () => {
+                this.db = request.result;
                 resolve();
             };
 
-            request.onerror = (event) => {
-                reject(`IndexedDB error: ${(event.target as IDBOpenDBRequest).error}`);
-            };
-        })
+            request.onerror = () => reject(request.error);
+        });
     };
 
-    async getAll<K extends keyof DBSchema>(
+    getAll<K extends keyof DBSchema>(
         storeName: K
-    ): Promise<DBSchema[K][]> {
+    ): Promise<DBSchema[K][]>{
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction(storeName, "readonly");
             const store = transaction.objectStore(storeName);
             const request = store.getAll();
+
             request.onsuccess = () => {
-                resolve(request.result);
+                resolve(request.result as DBSchema[K][]);
             };
-            request.onerror = (event) => {
-                reject(`IndexedDB error: ${(event.target as IDBRequest).error}`);
+
+            request.onerror = () => {
+                reject(request.error);
             };
         });
     };
 
-    async put<K extends keyof DBSchema>(
+    batch<K extends keyof DBSchema>(
         storeName: K,
-        data: DBSchema[K]
-    ): Promise<void> {
-        return new Promise(() => {
-            const transaction = this.db.transaction(storeName, "readwrite");
-            const store = transaction.objectStore(storeName);
-            
-            store.put(data);
-
-            transaction.oncomplete = () => {
-                console.log("Data successfully saved to IndexedDB");
-            };
-
-            transaction.onerror = (event) => {
-                console.error("Error saving data to IndexedDB:", (event.target as IDBRequest<any>).error);
-            };
-        })
-    };
-
-    async delete<K extends keyof DBSchema>(
-        storeName: K,
-        id: number
-    ): Promise<void> {
+        callback: (store: IDBObjectStore) => void
+    ): Promise<void>{
         return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction(storeName, "readwrite");
+            const transaction = this.db.transaction(storeName, "readwrite")
             const store = transaction.objectStore(storeName);
-            const deleteRequest = store.delete(id);
-            deleteRequest.onsuccess = () => {
-                console.log("Data successfully deleted from IndexedDB");
-                resolve();
-            };
-            deleteRequest.onerror = (event) => {
-                console.error("Error deleting data from IndexedDB:", (event.target as IDBRequest<any>).error);
-                reject((event.target as IDBRequest<any>).error);
-            };
-        });
-    };
 
-    async clear<K extends keyof DBSchema>(storeName: K): Promise<void> {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction(storeName, "readwrite");
-            const store = transaction.objectStore(storeName);
-            const clearRequest = store.clear();
-            
-            clearRequest.onsuccess = () => {
-                console.log("Data successfully cleared from IndexedDB");
-                resolve();
-            };
-            clearRequest.onerror = (event) => {
-                console.error("Error clearing data from IndexedDB:", (event.target as IDBRequest<any>).error);
-                reject((event.target as IDBRequest<any>).error);
-            };
+            callback(store);
+
+            transaction.oncomplete = () => resolve();
+            transaction.onerror = () => reject(transaction.error);
         })
-    };
-}
+    }
+};
