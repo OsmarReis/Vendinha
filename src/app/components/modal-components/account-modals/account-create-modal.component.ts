@@ -1,7 +1,7 @@
 import { Component, inject, signal } from "@angular/core";
-import { AccountsStore } from "../../store/accounts.store";
-import { ModalService } from "../../services/modal.service";
-import { InputComponent } from "../form-components/input.component";
+import { AccountsStore } from "../../../store/accounts.store";
+import { ModalService } from "../../../services/modal.service";
+import { InputComponent } from "../../form-components/input.component";
 
 @Component({
     selector: 'app-account-create-modal',

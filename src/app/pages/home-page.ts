@@ -5,61 +5,55 @@ import { SearchAccountInput } from '../components/search-account-input/search-ac
 import { SearchProductInput } from '../components/search-product-input/search-product-input';
 import { AccountsStore } from '../store/accounts.store';
 import { ProductsStore } from '../store/products.store';
+import { ActionButton } from "../components/action-button/action-button.component";
+import { AccountStoreSchema, ProductStoreSchema } from '../models/storeModels';
+import { SendAccountSelected } from '../services/sendAccountSelected.service';
+import { CartTotal } from '../components/cart-total/cart-total';
 
 @Component({
   selector: 'app-home-page',
-  imports: [MainWrapper, Wrapper, SearchAccountInput, SearchProductInput],
+  imports: [MainWrapper, Wrapper, SearchAccountInput, SearchProductInput, ActionButton, CartTotal],
   template: `
     <app-main-wrapper>
       <app-wrapper>
           <app-search-account-input
             [hasTextLabel]="labelText"
             [accountsData]="accountStore.accounts()"
+            (isAccountSelected)="setAccount($event)"
           />
         
           <app-search-product-input/>
       </app-wrapper>
 
       <app-wrapper>
-        <div class="w-full h-120"></div>
+        <div class="w-full h-150"></div>
       </app-wrapper>
 
       <app-wrapper>
-        <div class="w-full flex items-end">
-          @if (accountSelected() !== '') {
-            <div class="w-full">
-              <p class="text-xs">
-                Saldo da conta
-                <span class="bg-[#F5F5F5] py-0.5 px-1"
-                  >{{ accountSelected() }} - {{ accountName() }}</span
-                >:
-                <span>R$ {{ accountAmount().toFixed(2).toString() }}</span>
-              </p>
-              <p class="text-xs">
-                Saldo após compra: R$
-                {{ amountAfterPurchase().toFixed(2).toString() }}
-              </p>
-            </div>
-          }
-
-          <p class="w-full pt-1.5 text-right text-xl font-semibold">
-            Total: R$ {{ totalExpenses().toFixed(2).toString() }}
-          </p>
-        </div>
+        <app-cart-total [accountData]="accountSelected()" [cartTotalInput]="cartTotal()" />
       </app-wrapper>
-
-      <button class="w-full border border-orange-400 bg-orange-400 cursor-pointer text-white text-xl font-semibold uppercase py-4 rounded-md drop-shadow hover:bg-white hover:text-orange-400">Finalizar Compra</button>
+      <app-action-button>FINALIZAR COMPRA</app-action-button>
     </app-main-wrapper>
   `,
 })
 export class HomePage {
 
   protected accountStore = inject(AccountsStore)
+  protected accountSelected = signal<AccountStoreSchema | null>(null)
+
+  protected productStore = inject(ProductsStore)
+  protected productSelected = signal<ProductStoreSchema | null>(null)
 
   protected labelText = 'Possui conta?';
-  protected accountName = signal('');
-  protected accountAmount = signal(0);
-  protected totalExpenses = signal(20);
-  protected amountAfterPurchase = signal(0);
-  protected accountSelected = signal('');
+  protected cartTotal = signal(2000);
+  
+    setAccount(value: string) {
+      SendAccountSelected(value, this.accountStore, this.accountSelected)
+    }
+
+    setProduct(){
+
+    }
+
+  
 }
