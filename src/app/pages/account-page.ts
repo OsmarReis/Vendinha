@@ -5,26 +5,36 @@ import { SearchAccountInput } from "../components/search-account-input/search-ac
 import { ShowAccountInfo } from "../components/show-account-info/show-account-info";
 import { MatIconModule } from "@angular/material/icon";
 import { ModalService } from "../services/modal.service";
-import { AccountCreateModalComponent } from "../components/modal-components/account-create-modal.component";
+import { AccountCreateModalComponent } from "../components/modal-components/account-modals/account-create-modal.component";
 import { AccountsStore } from "../store/accounts.store";
 import { AccountStoreSchema } from "../models/storeModels";
+import { ActionButton } from "../components/action-button/action-button.component";
+import { SendAccountSelected } from "../services/sendAccountSelected.service";
 
 @Component({
   selector: "app-account-page",
-  imports: [MainWrapper, Wrapper, SearchAccountInput, ShowAccountInfo, MatIconModule],
+  imports: [MainWrapper, Wrapper, SearchAccountInput, ShowAccountInfo, ActionButton, MatIconModule],
   template: `
     <app-main-wrapper>
       <app-wrapper>
-        <app-search-account-input (isAccountSelected)="setAccountSelected($event)" [accountsData]="accountStore.accounts()"/>
+        <div class="w-full flex gap-2">
+          <app-search-account-input class="w-full" (isAccountSelected)="setAccount($event)" [accountsData]="accountStore.accounts()"/>
+            <button class="text-gray-700 px-2">
+          <mat-icon fontIcon="edit"/>
+        </button>
+        <button class="text-red-700 px-2">
+          <mat-icon fontIcon="delete_forever"/>
+        </button>
+        </div>
       </app-wrapper>
 
       <app-wrapper>
-        <app-show-account-info [selectedAccountData]="accountSelected()"/>
+        <app-show-account-info [accountData]="accountSelected()"/>
       </app-wrapper>
 
       <app-wrapper>
         <span class="text-center text-base uppercase font-semibold">Gastos em detalhes</span>
-        <div class="w-full h-90 bg-[#F5F5F5] rounded border border-black/50 overflow-auto">
+        <div class="w-full h-100 bg-[#F5F5F5] rounded border border-black/50 overflow-auto">
           @for (item of []; track $index) {
             <div class="p-2 border-b border-black/50">
               <span>Produto</span>
@@ -41,38 +51,21 @@ import { AccountStoreSchema } from "../models/storeModels";
           <span class="w-full text-center pl-6">Adicionar mais Saldo</span>
           <mat-icon fontIcon="add_circle_outlined"/>
         </button>
-        <div class="w-full flex gap-2.5">
-            <button class="w-full flex items-center justify-center py-2 pr-2 bg-[#F5F5F5] rounded-md border border-gray-700 text-base text-gray-700 uppercase font-semibold cursor-pointer hover:bg-gray-700 hover:text-white duration-200">
-          <span class="w-full text-center pl-6">Alterar conta</span>
-          <mat-icon fontIcon="edit"/>
-        </button>
-        <button class="w-full flex items-center justify-center py-2 pr-2 bg-[#F5F5F5] rounded-md border border-red-700 text-base text-red-700 uppercase font-semibold cursor-pointer hover:bg-red-700 hover:text-white duration-200">
-          <span class="w-full text-center pl-6">Apagar conta</span>
-          <mat-icon fontIcon="delete_forever"/>
-        </button>
-        </div>
       </app-wrapper>
-      <button
-        (click)="openCreateAccount()"
-        class="w-full border border-orange-400 bg-orange-400 cursor-pointer text-white text-xl font-semibold uppercase py-4 rounded-md drop-shadow hover:bg-white hover:text-orange-400 duration-200"
-      >Criar uma nova Conta</button>
+      <app-action-button (clickEvent)="openCreateAccount()">
+          Criar uma nova conta
+      </app-action-button>
     </app-main-wrapper>
   `,
 })
 export class AccountPage {
 
   protected accountStore = inject(AccountsStore)
-  protected accountSelectedInput = signal('');
   protected accountSelected = signal<AccountStoreSchema | null>(null)
 
-  setAccountSelected(value: string) {
-    const account = this.accountStore.accounts().find((acc) => {
-      return acc.id === Number(value)
-    }) ?? null;
-    
-    this.accountSelected.set(account);
+  setAccount(value: string) {
+    SendAccountSelected(value, this.accountStore, this.accountSelected)
   }
-
 
   //Modais para conta
   private modalService = inject(ModalService);
