@@ -9,20 +9,20 @@ import { CurrencyDisplay } from "../../services/displayCurrency.service";
         <div class="w-full flex items-end">
             <div class="w-full">
               <p class="text-xs">
-                Saldo da conta
+                {{cartTotalTexts.accountCurrentAmount}}
                 <span class="bg-[#F5F5F5] py-0.5 px-1"
                   >{{ accountData()?.name }}</span
                 >:
-                <span>R$ {{ currentAmountDisplay() }}</span>
+                <span>{{cartTotalTexts.currencySymbol}} {{ currentAmountDisplay() }}</span>
               </p>
               <p class="text-xs">
-                Saldo após compra: R$
+                {{cartTotalTexts.accountAmountAfterPurchase}} {{cartTotalTexts.currencySymbol}}
                 {{ amountAfterPurchase() }}
               </p>
             </div>
 
           <p class="w-full pt-1.5 text-right text-xl font-semibold">
-            Total: R$ {{ cartTotalDisplay() }}
+            {{cartTotalTexts.totalCartAmount}} {{cartTotalTexts.currencySymbol}} {{ cartTotalDisplay() }}
           </p>
         </div>
     `
@@ -30,6 +30,13 @@ import { CurrencyDisplay } from "../../services/displayCurrency.service";
 export class CartTotal {
     accountData = input<AccountStoreSchema | null>();
     cartTotalInput = input(0);
+
+    protected cartTotalTexts = {
+      accountCurrentAmount: "Saldo da conta",
+      accountAmountAfterPurchase: "Saldo após compra:",
+      totalCartAmount: "Total:",
+      currencySymbol: "R$",
+    }
 
     protected currentAmount = () => (Number(this.accountData()?.depositedAmount) - Number(this.accountData()?.totalExpenses));
 

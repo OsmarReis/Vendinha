@@ -7,10 +7,10 @@ import { CurrencyDisplay } from "../../services/displayCurrency.service";
     imports: [],
     template: `
     <div class="flex flex-col gap-3 items-center py-3 text-base uppercase">
-          <span >Nome: {{accountData()?.name}} </span>
-        <span >Valor Inicial: R$ {{initialAmount()}}</span>
-        <span >Total de Gastos: R$ {{totalExpenses()}}</span>
-        <span class="text-green-700/90 font-semibold">Valor Atual: R$ {{currentAmount()}}</span>
+          <span >{{nameTextLabel}} {{accountData()?.name}} </span>
+        <span >{{initialAmountTextLabel}} {{currencySymbolText}} {{initialAmount()}}</span>
+        <span >{{totalExpensesTextLabel}} {{currencySymbolText}} {{totalExpenses()}}</span>
+        <span class="text-green-700/90 font-semibold">{{currentAmountTextLabel}} {{currencySymbolText}} {{currentAmount()}}</span>
     </div>
     `
 })
@@ -20,4 +20,10 @@ export class ShowAccountInfo {
     protected initialAmount = () => CurrencyDisplay(this.accountData()?.depositedAmount ?? 0);
     protected totalExpenses = () => CurrencyDisplay(this.accountData()?.totalExpenses ?? 0);
     protected currentAmount = () => CurrencyDisplay(Number(this.accountData()?.depositedAmount) - Number(this.accountData()?.totalExpenses));
+
+    protected nameTextLabel = "Nome:";
+    protected initialAmountTextLabel = "Valor Inicial:";
+    protected totalExpensesTextLabel = "Total de Gastos:";
+    protected currentAmountTextLabel = "Valor Atual:";
+    protected currencySymbolText = "R$";
 }

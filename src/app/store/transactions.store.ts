@@ -13,7 +13,7 @@ export class TransactionsStore extends BaseStoreDB<'transactions'> {
 
     constructor(db: IndexedDBService){super(db)}
 
-    add(account: Omit<TransactionStoreSchema, 'updateAt'>){
+    add(account: Omit<TransactionStoreSchema, 'updatedAt'>){
         this.signalRef.update(
             list => [...list, this.touch({...account, updatedAt: 0})]
         );

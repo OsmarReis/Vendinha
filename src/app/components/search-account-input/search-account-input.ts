@@ -18,7 +18,7 @@ import { AccountStoreSchema } from '../../models/storeModels';
       (change)="selectAccount($event)"
       class="w-full flex items-center justify-center bg-[#F5F5F5] font-semibold rounded-md border border-gray-200 pl-1.5 py-1.5"
     >
-      <option value="">Escolha uma conta</option>
+      <option value="">{{optionPlaceholderText}}</option>
       @for (account of accountsData(); track account.id) {
         <option [value]="account.id">{{account.id}} - {{ account.name }}</option>
       }
@@ -31,6 +31,7 @@ export class SearchAccountInput {
   hasTextLabel = input("");
   protected selectedAccount = signal(' ');
   protected isAccountSelected = output<string>();
+  protected optionPlaceholderText = "Escolha uma conta";
 
   selectAccount($event: Event) {
     this.selectedAccount.set(($event.target as HTMLSelectElement).value);

@@ -9,18 +9,18 @@ import { InputComponent } from "../../form-components/input.component";
     imports: [InputComponent],
     template: `
         <div class="flex flex-col gap-4">
-            <h1 class="text-center text-xl font-semibold">Criar conta</h1>
-            <app-input placeholder="Digite um nome" [model]="name"/>
-            <app-input placeholder="Valor à ser depositado" type="currency" [model]="depositedAmount"/>
+            <h1 class="text-center text-xl font-semibold">{{createModalTexts.formTitle}}</h1>
+            <app-input [placeholder]="createModalTexts.name" [model]="name"/>
+            <app-input [placeholder]="createModalTexts.amount" type="currency" [model]="depositedAmount"/>
             <button
                 (click)="submit()"
                 class="w-full flex items-center justify-center py-4 pr-2 bg-orange-400 rounded-md border border-orange-400 text-base text-white uppercase font-semibold cursor-pointer hover:bg-white hover:text-orange-400 duration-200">
-          <span class="w-full text-center pl-6">Criar conta</span>
+          <span class="w-full text-center pl-6">{{createModalTexts.submitBtn}}</span>
         </button>
             <button
                 (click)="cancel()"
                 class="w-full flex items-center justify-center py-4 pr-2 bg-gray-400 rounded-md border border-gray-400 text-base text-white uppercase font-semibold cursor-pointer hover:bg-white hover:text-gray-400 duration-200">
-          <span class="w-full text-center pl-6">Voltar</span>
+          <span class="w-full text-center pl-6">{{createModalTexts.cancelBtn}}</span>
         </button>
         </div>
     `,
@@ -30,20 +30,26 @@ export class AccountCreateModalComponent {
     private modalService = inject(ModalService);
     private accountStore = inject(AccountsStore);
 
+    protected createModalTexts = {
+        formTitle: "Criar conta",
+        name: "Digite um nome",
+        amount: "Valor à ser depositado",
+        submitBtn: "Criar conta",
+        cancelBtn: "Voltar",
+    }
+
+    protected submitAlertTexts = {
+        insertName: "INSIRA UM NOME!",
+        successName: "Nome:",
+        successAmount: "Saldo depositado:"
+    }
+
     name = signal("");
     depositedAmount = signal(0);
 
-    setName () {
-
-    }
-
-    setDepositedAmount () {
-
-    }
-
     submit() {
         if(this.name() === ""){
-            return alert("INSIRA UM NOME!")
+            return alert(this.submitAlertTexts.insertName)
         }
 
         const newAccount = {
@@ -59,7 +65,7 @@ export class AccountCreateModalComponent {
 
         this.modalService.close();
 
-        alert(`Nome: ${this.name()} Saldo depositado: ${this.depositedAmount}`)
+        alert(this.submitAlertTexts.successName + " " + this.name() + " " + this.submitAlertTexts.successAmount + " " + this.depositedAmount())
     }
 
     cancel() {

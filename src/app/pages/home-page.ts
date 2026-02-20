@@ -17,7 +17,7 @@ import { CartTotal } from '../components/cart-total/cart-total';
     <app-main-wrapper>
       <app-wrapper>
           <app-search-account-input
-            [hasTextLabel]="labelText"
+            [hasTextLabel]="homePageTexts.accountInputLabel"
             [accountsData]="accountStore.accounts()"
             (isAccountSelected)="setAccount($event)"
           />
@@ -32,7 +32,7 @@ import { CartTotal } from '../components/cart-total/cart-total';
       <app-wrapper>
         <app-cart-total [accountData]="accountSelected()" [cartTotalInput]="cartTotal()" />
       </app-wrapper>
-      <app-action-button>FINALIZAR COMPRA</app-action-button>
+      <app-action-button>{{homePageTexts.actionBtn}}</app-action-button>
     </app-main-wrapper>
   `,
 })
@@ -44,8 +44,12 @@ export class HomePage {
   protected productStore = inject(ProductsStore)
   protected productSelected = signal<ProductStoreSchema | null>(null)
 
-  protected labelText = 'Possui conta?';
   protected cartTotal = signal(2000);
+  
+  protected homePageTexts = {
+    actionBtn: "Finalizar compra",
+    accountInputLabel: "Possui conta?",
+  }
   
     setAccount(value: string) {
       SendAccountSelected(value, this.accountStore, this.accountSelected)

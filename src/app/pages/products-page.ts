@@ -8,7 +8,7 @@ import { Wrapper } from "../components/wrapper/wrapper";
   template: `
     <app-main-wrapper>
       <app-wrapper>
-        <h1 class="text-center text-base font-medium py-4">Lista de produtos cadastrados</h1>
+        <h1 class="text-center text-base font-medium py-4">{{productsPageTexts.productsRegisteredTitle}}</h1>
         <div class="w-full h-155">
 
         </div>
@@ -18,5 +18,10 @@ import { Wrapper } from "../components/wrapper/wrapper";
   `,
 })
 export class ProductsPage {
-
+  
+  
+  
+  protected productsPageTexts = {
+    productsRegisteredTitle: "Lista de produtos cadastrados"
+  }
 }

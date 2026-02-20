@@ -1,6 +1,14 @@
 import { Injectable } from "@angular/core";
 import { DBSchema } from "../models/storeModels";
 
+const enums = {
+    appDB: "app-DB",
+    id: "id",
+    accounts: "accounts",
+    products: "products",
+    transactions: "transactions",
+}
+
 @Injectable({ providedIn: "root" })
 export class IndexedDBService {
     
@@ -9,21 +17,21 @@ export class IndexedDBService {
     async init(): Promise<void> {
         return new Promise ((resolve, reject) => {
 
-            const request = indexedDB.open('app-DB', 1)
+            const request = indexedDB.open(enums.appDB, 1)
 
             request.onupgradeneeded = (event: any) => { //verificar esse any
                 const db = event.target.result as IDBDatabase;
 
-                if(!db.objectStoreNames.contains("accounts")) {
-                    db.createObjectStore("accounts", { keyPath: "id" })
+                if(!db.objectStoreNames.contains(enums.accounts)) {
+                    db.createObjectStore(enums.accounts, { keyPath: enums.id })
                 };
 
-                if(!db.objectStoreNames.contains("products")) {
-                    db.createObjectStore("products", { keyPath: "id" })
+                if(!db.objectStoreNames.contains(enums.products)) {
+                    db.createObjectStore(enums.products, { keyPath: enums.id })
                 };
 
-                if(!db.objectStoreNames.contains("transactions")) {
-                    db.createObjectStore("transactions", { keyPath: "id" })
+                if(!db.objectStoreNames.contains(enums.transactions)) {
+                    db.createObjectStore(enums.transactions, { keyPath: enums.id })
                 };
             };
 

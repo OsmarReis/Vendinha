@@ -17,40 +17,40 @@ import { ActionButton } from "../components/action-button/action-button.componen
       <app-wrapper>
         <div class="w-ful flex flex-col gap-2">
         <p>
-          Custo total de sua vendinha:
+          {{balancePageTexts.vendingTotalCostTxt}}
           <span>
-          R$ {{vendingTotalCost()}}
+          {{balancePageTexts.currencySymbol}} {{vendingTotalCost()}}
         </span>
         </p>
         <p>
-          Faturamento projetado:
+          {{balancePageTexts.projectedIncomeTxt}}
           <span>
-            R$ {{totalProjectedIncome()}}
+            {{balancePageTexts.currencySymbol}} {{totalProjectedIncome()}}
           </span>
         </p>
         <br/>
         <p>
-          Faturamento alcançado: 
+          {{balancePageTexts.incomeAchievedTxt}} 
           <span>
-            R$ {{incomeAchieved()}}
+            {{balancePageTexts.currencySymbol}} {{incomeAchieved()}}
           </span>
         </p>
         <p>
-          Balanço final:
+          {{balancePageTexts.finalBalanceTxt}}
           <span>
-            R$ {{finalBalance()}}
+            {{balancePageTexts.currencySymbol}} {{finalBalance()}}
           </span>
         </p>
         <br/>
         <div class="flex justify-center items-center gap-3 text-base">
-          Situação atual:
+          {{balancePageTexts.currentSituation}}
           <span [classList]="[classList, findClass() ]">
             @if (finalBalance() < 0) {
-              Em prejuízo
+              {{balancePageTexts.lossSituation}}
             } @else if (finalBalance() > 0) {
-              Lucro alcançado!
+              {{balancePageTexts.profitSituation}}
             } @else if (finalBalance() === 0) {
-              Sem prejuízo, mas sem lucro
+              {{balancePageTexts.neutralSituation}}
             } @else {
               ""
             }
@@ -60,12 +60,12 @@ import { ActionButton } from "../components/action-button/action-button.componen
       </app-wrapper>
 
       <app-wrapper>
-        <h1 class="text-base text-center uppercase font-semibold py-4">Transações feitas</h1>
+        <h1 class="text-base text-center uppercase font-semibold py-4">{{balancePageTexts.transactionsListTitle}}</h1>
         <div class="w-full h-100 border border-black/50 rounded bg-[#F5F5F5]">
 
         </div>
       </app-wrapper>
-      <app-action-button>Adicionar compra de produto</app-action-button>
+      <app-action-button>{{balancePageTexts.actionBtn}}</app-action-button>
     </app-main-wrapper>
   `,
 })
@@ -75,6 +75,20 @@ export class BalancePage {
     this.totalProjectedIncome.set(200)
     this.incomeAchieved.set(100)
     this.finalBalance.set(this.incomeAchieved() - this.vendingTotalCost())
+  }
+
+  protected balancePageTexts = {
+    actionBtn: "Adicionar compra de produto",
+    transactionsListTitle: "Transações feitas",
+    currentSituation: "Situação atual:",
+    lossSituation: "Em prejuízo",
+    profitSituation: "Lucro alcançado!",
+    neutralSituation: "Sem prejuízo, mas sem lucro",
+    finalBalanceTxt: "Balanço final:",
+    incomeAchievedTxt: "Faturamento alcançado:",
+    projectedIncomeTxt: "Faturamento esperado:",
+    vendingTotalCostTxt: "Custo total de sua vendinha:",
+    currencySymbol: "R$",
   }
 
   protected vendingTotalCost = signal(0);

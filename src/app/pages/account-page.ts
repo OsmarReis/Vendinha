@@ -20,10 +20,10 @@ import { SendAccountSelected } from "../services/sendAccountSelected.service";
         <div class="w-full flex gap-2">
           <app-search-account-input class="w-full" (isAccountSelected)="setAccount($event)" [accountsData]="accountStore.accounts()"/>
             <button class="text-gray-700 px-2">
-          <mat-icon fontIcon="edit"/>
+          <mat-icon [fontIcon]="accountPagesIconsRef.edit"/>
         </button>
         <button class="text-red-700 px-2">
-          <mat-icon fontIcon="delete_forever"/>
+          <mat-icon [fontIcon]="accountPagesIconsRef.remove"/>
         </button>
         </div>
       </app-wrapper>
@@ -33,7 +33,7 @@ import { SendAccountSelected } from "../services/sendAccountSelected.service";
       </app-wrapper>
 
       <app-wrapper>
-        <span class="text-center text-base uppercase font-semibold">Gastos em detalhes</span>
+        <span class="text-center text-base uppercase font-semibold">{{accountPagesTexts.detailExpenses}}</span>
         <div class="w-full h-100 bg-[#F5F5F5] rounded border border-black/50 overflow-auto">
           @for (item of []; track $index) {
             <div class="p-2 border-b border-black/50">
@@ -48,12 +48,12 @@ import { SendAccountSelected } from "../services/sendAccountSelected.service";
 
       <app-wrapper>
         <button class="w-full flex items-center justify-center py-2 pr-2 bg-[#F5F5F5] rounded-md border border-green-700 text-base text-green-700 uppercase font-semibold cursor-pointer hover:bg-green-700 hover:text-white duration-200">
-          <span class="w-full text-center pl-6">Adicionar mais Saldo</span>
-          <mat-icon fontIcon="add_circle_outlined"/>
+          <span class="w-full text-center pl-6">{{accountPagesTexts.addAmount}}</span>
+          <mat-icon [fontIcon]="accountPagesIconsRef.add"/>
         </button>
       </app-wrapper>
       <app-action-button (clickEvent)="openCreateAccount()">
-          Criar uma nova conta
+          {{accountPagesTexts.actionBtn}}
       </app-action-button>
     </app-main-wrapper>
   `,
@@ -62,6 +62,18 @@ export class AccountPage {
 
   protected accountStore = inject(AccountsStore)
   protected accountSelected = signal<AccountStoreSchema | null>(null)
+
+  protected accountPagesTexts = {
+    actionBtn: "Criar uma nova conta",
+    addAmount: "Adicionar saldo",
+    detailExpenses: "Gastos em detalhes",
+  }
+
+  protected accountPagesIconsRef = {
+    edit: "edit",
+    remove: "delete_forever",
+    add: "add_circle_outlined",
+  }
 
   setAccount(value: string) {
     SendAccountSelected(value, this.accountStore, this.accountSelected)
