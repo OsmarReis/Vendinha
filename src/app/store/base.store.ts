@@ -2,12 +2,12 @@ import { effect, WritableSignal } from "@angular/core";
 import { IndexedDBService } from "../services/indexeddb.service";
 import { DBSchema, BaseStoreSchema } from "../models/storeModels";
 
-export abstract class BaseStoreDB<K extends keyof DBSchema> {
+export abstract class BaseStoreDB<name extends keyof DBSchema> {
 
-    protected abstract storeName: K;
-    protected abstract signalRef: WritableSignal<DBSchema[K][]>;
+    protected abstract storeName: name;
+    protected abstract signalRef: WritableSignal<DBSchema[name][]>;
 
-    private previous = new Map<number, DBSchema[K]>();
+    private previous = new Map<number, DBSchema[name]>();
     private debounceTimer: any;
 
     constructor( protected db: IndexedDBService) {}
@@ -31,12 +31,12 @@ export abstract class BaseStoreDB<K extends keyof DBSchema> {
             clearTimeout(this.debounceTimer);
 
             this.debounceTimer = setTimeout(() => {
-                const currentMap = new Map<number, DBSchema[K]>(
+                const currentMap = new Map<number, DBSchema[name]>(
                     currentList.map(item => [item.id, item])
                 );
 
                 const toDelete: number[] = [];
-                const toUpsert: DBSchema[K][] = [];
+                const toUpsert: DBSchema[name][] = [];
 
                 for(const [id] of this.previous){
                     if(!currentMap.has(id)) {
@@ -60,7 +60,9 @@ export abstract class BaseStoreDB<K extends keyof DBSchema> {
                     return;
                 };
 
-                this.db.batch(this.storeName, store => {
+                this.db.batch(this.storeName, stores => {
+                    const store = stores[this.storeName];
+
                     toDelete.forEach(id => store.delete(id));
                     toUpsert.forEach(item => store.put(item));
                 });

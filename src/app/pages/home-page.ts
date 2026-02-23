@@ -3,8 +3,8 @@ import { MainWrapper } from '../components/main-wrapper/main-wrapper';
 import { Wrapper } from '../components/wrapper/wrapper';
 import { SearchAccountInput } from '../components/search-account-input/search-account-input';
 import { SearchProductInput } from '../components/search-product-input/search-product-input';
-import { AccountsStore } from '../store/accounts.store';
-import { ProductsStore } from '../store/products.store';
+import { AccountStore } from '../store/accounts.store';
+import { ProductStore } from '../store/products.store';
 import { ActionButton } from "../components/action-button/action-button.component";
 import { AccountStoreSchema, ProductStoreSchema } from '../models/storeModels';
 import { SendAccountSelected } from '../services/sendAccountSelected.service';
@@ -38,10 +38,10 @@ import { CartTotal } from '../components/cart-total/cart-total';
 })
 export class HomePage {
 
-  protected accountStore = inject(AccountsStore)
+  protected accountStore = inject(AccountStore)
   protected accountSelected = signal<AccountStoreSchema | null>(null)
 
-  protected productStore = inject(ProductsStore)
+  protected productStore = inject(ProductStore)
   protected productSelected = signal<ProductStoreSchema | null>(null)
 
   protected cartTotal = signal(2000);

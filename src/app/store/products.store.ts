@@ -4,7 +4,7 @@ import { IndexedDBService } from "../services/indexeddb.service";
 import { ProductStoreSchema } from "../models/storeModels";
 
 @Injectable({ providedIn: "root"})
-export class ProductsStore extends BaseStoreDB<'products'> {
+export class ProductStore extends BaseStoreDB<'products'> {
 
     protected override storeName = 'products' as const;
     protected override signalRef = signal<ProductStoreSchema[]>([]);

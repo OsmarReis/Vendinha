@@ -1,5 +1,5 @@
 import { Component, inject, signal } from "@angular/core";
-import { AccountsStore } from "../../../store/accounts.store";
+import { AccountStore } from "../../../store/accounts.store";
 import { ModalService } from "../../../services/modal.service";
 import { InputComponent } from "../../form-components/input.component";
 
@@ -28,7 +28,7 @@ import { InputComponent } from "../../form-components/input.component";
 export class AccountCreateModalComponent {
 
     private modalService = inject(ModalService);
-    private accountStore = inject(AccountsStore);
+    private accountStore = inject(AccountStore);
 
     protected createModalTexts = {
         formTitle: "Criar conta",
@@ -44,10 +44,10 @@ export class AccountCreateModalComponent {
         successAmount: "Saldo depositado:"
     }
 
-    name = signal("");
-    depositedAmount = signal(0);
+    protected name = signal("");
+    protected depositedAmount = signal(0);
 
-    submit() {
+    protected submit() {
         if(this.name() === ""){
             return alert(this.submitAlertTexts.insertName)
         }
@@ -68,7 +68,7 @@ export class AccountCreateModalComponent {
         alert(this.submitAlertTexts.successName + " " + this.name() + " " + this.submitAlertTexts.successAmount + " " + this.depositedAmount())
     }
 
-    cancel() {
+    protected cancel() {
         this.modalService.close();
     }
 }

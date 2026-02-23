@@ -6,7 +6,7 @@ import { ShowAccountInfo } from "../components/show-account-info/show-account-in
 import { MatIconModule } from "@angular/material/icon";
 import { ModalService } from "../services/modal.service";
 import { AccountCreateModalComponent } from "../components/modal-components/account-modals/account-create-modal.component";
-import { AccountsStore } from "../store/accounts.store";
+import { AccountStore } from "../store/accounts.store";
 import { AccountStoreSchema } from "../models/storeModels";
 import { ActionButton } from "../components/action-button/action-button.component";
 import { SendAccountSelected } from "../services/sendAccountSelected.service";
@@ -60,7 +60,7 @@ import { SendAccountSelected } from "../services/sendAccountSelected.service";
 })
 export class AccountPage {
 
-  protected accountStore = inject(AccountsStore)
+  protected accountStore = inject(AccountStore)
   protected accountSelected = signal<AccountStoreSchema | null>(null)
 
   protected accountPagesTexts = {

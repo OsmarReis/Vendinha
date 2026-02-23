@@ -1,19 +1,19 @@
 import { Injectable, signal } from "@angular/core";
 import { BaseStoreDB } from "./base.store";
 import { IndexedDBService } from "../services/indexeddb.service";
-import { TransactionStoreSchema } from "../models/storeModels";
+import { SaleStoreSchema } from "../models/storeModels";
 
 @Injectable({ providedIn: "root"})
-export class TransactionsStore extends BaseStoreDB<'transactions'> {
+export class SaleStore extends BaseStoreDB<'sales'> {
 
-    protected override storeName = 'transactions' as const;
-    protected override signalRef = signal<TransactionStoreSchema[]>([]);
+    protected override storeName = 'sales' as const;
+    protected override signalRef = signal<SaleStoreSchema[]>([]);
 
     readonly accounts = this.signalRef.asReadonly();
 
     constructor(db: IndexedDBService){super(db)}
 
-    add(account: Omit<TransactionStoreSchema, 'updatedAt'>){
+    add(account: Omit<SaleStoreSchema, 'updatedAt'>){
         this.signalRef.update(
             list => [...list, this.touch({...account, updatedAt: 0})]
         );

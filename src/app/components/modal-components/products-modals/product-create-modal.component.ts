@@ -1,5 +1,5 @@
 import { Component, inject, signal } from "@angular/core";
-import { ProductsStore } from "../../../store/products.store";
+import { ProductStore } from "../../../store/products.store";
 import { ModalService } from "../../../services/modal.service";
 import { InputComponent } from "../../form-components/input.component";
 
@@ -29,7 +29,7 @@ import { InputComponent } from "../../form-components/input.component";
 export class AccountCreateModalComponent {
 
     private modalService = inject(ModalService);
-    private productsStore = inject(ProductsStore);
+    private productStore = inject(ProductStore);
 
     protected createModalTexts = {
         formTitle: "Adicionar Produto",
@@ -62,17 +62,17 @@ export class AccountCreateModalComponent {
             return alert(this.submitAlertTexts.priceErrorMsg)
         }
 
-        const newProduct = {
-            id: Date.now(),
-            name: this.product.name(),
-            sellingPrice: this.product.sellingPrice(),
-            imgURL: this.product.imgURL(),
-            buyingPrice: this.product.buyingPrice(),
-            quantity: this.product.quantity(),
-            updatedAt: Date.now(),
-        };
+        // const newProduct = {
+        //     id: Date.now(),
+        //     name: this.product.name(),
+        //     sellingPrice: this.product.sellingPrice(),
+        //     imgURL: this.product.imgURL(),
+        //     buyingPrice: this.product.buyingPrice(),
+        //     quantity: this.product.quantity(),
+        //     updatedAt: Date.now(),
+        // };
 
-        this.productsStore.add(newProduct);
+        // this.productsStore.add(newProduct);
 
         this.modalService.close();
 
