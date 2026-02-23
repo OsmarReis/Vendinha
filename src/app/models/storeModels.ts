@@ -9,7 +9,7 @@ export interface DBSchema {
   transactions: TransactionStoreSchema;
 }
 
-export interface ProductsSoldI {
+export interface SalesMadeI {
     id: number;
     name: string;
     sellingPrice: number;
@@ -22,13 +22,13 @@ export interface AccountStoreSchema extends BaseStoreSchema {
     name: string;
     depositedAmount: number;
     totalExpenses: number;
-    productsBought: ProductsSoldI[];
+    productsBought: SalesMadeI[];
 }
 
 export interface ProductStoreSchema extends BaseStoreSchema {
     name: string;
     sellingPrice: number;
-    imgURL: string;
+    imgURL?: string;
     buyingPrice?: number;
     quantity?: number;
 }
@@ -36,5 +36,5 @@ export interface ProductStoreSchema extends BaseStoreSchema {
 export interface TransactionStoreSchema extends BaseStoreSchema {
     timestamp: Date;
     totalAmountSellingPrice: number;
-    productsSold: ProductsSoldI[];
+    productsSold: SalesMadeI[];
 }
