@@ -72,7 +72,7 @@ export abstract class BaseStoreDB<name extends keyof DBSchema> {
         });
     };
 
-    protected touch<T extends BaseStoreSchema>(item: T): T {
+    protected touch<store extends BaseStoreSchema>(item: store): store {
         return {
             ...item,
             updatedAt: Date.now()

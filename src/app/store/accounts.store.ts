@@ -19,6 +19,16 @@ export class AccountStore extends BaseStoreDB<'accounts'> {
         );
     };
 
+    update(id: number, name: string){
+        this.signalRef.update(
+            list => list.map(
+                (item) => {
+                    return item.id === id ? item : item
+                }
+            )
+        )
+    }
+
     remove(id: number){
         this.signalRef.update(
             list => list.filter(a=>a.id !== id)

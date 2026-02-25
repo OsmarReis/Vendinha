@@ -10,6 +10,7 @@ import { AccountStore } from "../store/accounts.store";
 import { AccountStoreSchema } from "../models/storeModels";
 import { ActionButton } from "../components/action-button/action-button.component";
 import { SendAccountSelected } from "../services/sendAccountSelected.service";
+import { AccountDeleteModalComponent } from "../components/modal-components/account-modals/account-delete-modal.component";
 
 @Component({
   selector: "app-account-page",
@@ -22,7 +23,7 @@ import { SendAccountSelected } from "../services/sendAccountSelected.service";
             <button class="text-gray-700 px-2">
           <mat-icon [fontIcon]="accountPagesIconsRef.edit"/>
         </button>
-        <button class="text-red-700 px-2">
+        <button (click)="openRemoveAccount()" class="text-red-700 px-2">
           <mat-icon [fontIcon]="accountPagesIconsRef.remove"/>
         </button>
         </div>
@@ -75,13 +76,24 @@ export class AccountPage {
     add: "add_circle_outlined",
   }
 
-  setAccount(value: string) {
+  protected setAccount(value: string) {
     SendAccountSelected(value, this.accountStore, this.accountSelected)
   }
 
   //Modais para conta
   private modalService = inject(ModalService);
-  openCreateAccount() {
+  protected openCreateAccount() {
     this.modalService.open(AccountCreateModalComponent);
   };
+
+  protected openEditAccount() {
+  }
+
+  protected openRemoveAccount() {
+    if(this.accountSelected() === null) {
+      return;
+    } else {
+      this.modalService.open(AccountDeleteModalComponent, this.accountSelected());
+    }
+  }
 }
